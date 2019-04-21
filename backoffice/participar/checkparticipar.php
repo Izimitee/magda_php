@@ -9,7 +9,7 @@ $nome_cao = isset($_POST['nome']) ? $_POST['nome'] : '';
 $raca = isset($_POST['raca']) ? $_POST['raca'] : '';
 $ano_nasc = isset($_POST['ano_nasc']) ? $_POST['ano_nasc'] : '';
 $vacinas = isset($_POST['vacinas']) ? $_POST['vacinas'] : '';
-$id = $_SESSION['user_id'];
+$user_id = $_SESSION['user_id'];
 $mysqli = db_connect();
 // $email = $mysqli->real_escape_string($_POST['email']);
 //$upass = $mysqli->real_escape_string($_POST['password']);
@@ -19,7 +19,7 @@ $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 // Check if image file is a actual image or fake image
-
+$new_name =  uniqid()."." . $imageFileType;
 if(isset($_POST["submit"])) {
     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
     if($check !== false) {
@@ -51,25 +51,24 @@ if ($uploadOk == 0) {
     echo "Sorry, your file was not uploaded.";
 // if everything is ok, try to upload file
 } else {
-    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+    //print_r($_FILES["fileToUpload"]["tmp_name"]);die();
+    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_dir.$new_name)) {
         echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-        $message = "Paricipante adicionado com sucesso";
-        echo "<script type='text/javascript'>alert('$message');</script>";
+        
     } else {
         echo "Sorry, there was an error uploading your file.";
         
-        $message = "Paricipante adicionado com sucesso";
-        echo "<script type='text/javascript'>alert('$message');</script>";
+        
     }
 }
 
 $n_fich = basename( $_FILES["fileToUpload"]["name"]);
 //------------------------------------------------------------------------------
-	$query = "insert into participantes (id,nome,ano_nasc,numero_chip,raca,vacinas,sexo,img) VALUES 
-    ('$id','$nome_cao',
-    '$ano_nasc','$n_chip','$raca','$vacinas','$sexo','$n_fich')";
-    $query1 = "UPDATE users
-    SET participa = 1 WHERE id='$id'";
+	$query = "insert into participantes (user_id,nome,ano_nasc,numero_chip,raca,vacinas,sexo,img,concurso_id) VALUES 
+    ('$user_id','$nome_cao',
+    '$ano_nasc','$n_chip','$raca','$vacinas','$sexo','$new_name',(SELECT id from concursos where ativo = 1))";
+    $query1 = "UPDATE users SET participa = 1 WHERE id='$user_id'";
+    //INSERT INTO `participantes`(`nome`, `ano_nasc`, `numero_chip`, `raca`, `vacinas`, `sexo`, `concurso_id`) VALUES ('aaa','2015','1234','oi','1','male',(SELECT id from concursos where ativo = 1));
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------

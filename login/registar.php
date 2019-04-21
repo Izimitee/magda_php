@@ -60,22 +60,22 @@ function validateForm() {
 					
 					
 					<div class="wrap-input100 validate-input m-b-16" data-validate = "Password is required">
-						<input pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" class="input100" type="password" name="password" id="password" placeholder="Password" required>
+						<input pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" class="input100" type="password" name="password" id="password1" placeholder="Password" required>
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input m-b-16" data-validate = "Password is required">
-						<input  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" class="input100" type="password" name="password1" id="password1" placeholder="Password" required>
+						<input pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" class="input100" type="password" name="password1" id="password2" placeholder="Password" required>
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input m-b-16" data-validate = "Campo is required">
-						<input class="input100" type="radio" name="nivel" value="1" placeholder="Juíz" required>Juíz
+						<input onclick="VeriPass()" class="input100" type="radio" name="nivel" value="1" placeholder="Juíz" required>Juíz
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input m-b-16" data-validate = "Campo is required">
-						<input class="input100" type="radio" name="nivel" value="0" placeholder="Participante" required>Participante
+						<input onclick="VeriPass()" class="input100" type="radio" name="nivel" value="0" placeholder="Participante" required>Participante
 						<span class="focus-input100"></span>
 					</div>
 <!--
@@ -92,7 +92,18 @@ function validateForm() {
 					
 
 				</form>
-				
+				<script>
+				function VeriPass() {
+				if(document.getElementById("password1").value != document.getElementById("password2").value)
+				{
+				alert("As palavras passe diferem.");
+				}
+				else
+				{
+					alert("As palavras passe são iguais.");
+				}
+			}
+			</script>
 				
 			</div>
 		</div>

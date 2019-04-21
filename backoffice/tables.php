@@ -85,7 +85,7 @@ header("Pragma: no-cache");
 		
 		$mysqli = db_connect();
 		
-		$query = "SELECT * FROM participantes";
+		$query = "SELECT * FROM participantes where concurso_id = (Select id from concursos where ativo = 1)";
 		$result = $mysqli->query($query);
 	
 		while($row = $result->fetch_array())
@@ -116,7 +116,18 @@ header("Pragma: no-cache");
 						//}?>
       </tr>
       <tr align="center">
-      <?php if($_SESSION['user_nivel'] == 1 && $row['classificacao'] == NULL)
+      <?php 
+      $user_id = $_SESSION['user_id'];
+      $participante_id = $row['id'];
+      $query = "SELECT * from confirma_votacao where user_id = $user_id and participante_id = $participante_id";
+      if($result1 = $mysqli->query($query)){
+        $user = $result1->fetch_assoc();
+      
+      
+      
+      }
+      
+      if($_SESSION['user_nivel'] == 1 && $user == null)
         {?>
         <td colspan="42">
           <a class="btn btn-primary" data-toggle="collapse" href="#a<?php echo $chip;?>" role="button" aria-expanded="false" aria-controls="collapseExample"><b>Votar</b></a>
@@ -133,7 +144,7 @@ header("Pragma: no-cache");
 }</style>
           <form action="votar.php" method="post">
             Classificação de 0 a 20 <input width="100px" type="number" name="classificacao" id="classificacao" min="0" max="20" placeholder="Classificação de 0 a 20">
-            <input type="hidden" id="img" name="img" value="<?php echo $row['img'];?>">
+            <input type="hidden" id="id" name="id" value="<?php echo $row['id'];?>">
             <input type="submit" value="Validar">
             </form>
         </td>
@@ -149,7 +160,7 @@ header("Pragma: no-cache");
 
         </td></tr></table><?php
         }
-        else if($_SESSION['user_nivel'] == 1 && $row['classificacao'] > 0)
+        else if($_SESSION['user_nivel'] == 1 && $user != null)
         {?>
           <td colspan="42"><b><?php echo "Votação já efetuada.";?></b></td><?php
         }?>
@@ -215,7 +226,7 @@ header("Pragma: no-cache");
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="../index.html">Logout</a>
+          <a class="btn btn-primary" href="../index.php">Logout</a>
         </div>
       </div>
     </div>
